@@ -1,8 +1,5 @@
-pyautogui~=0.9.54
 opencv-python~=4.10.0.84
 mediapipe~=0.10.14
 open3d~=0.18.0
 pygame~=2.6.0
 pywin32~=306
-numpy~=2.0.0
-flet~=0.23.2
