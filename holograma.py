@@ -80,7 +80,6 @@ logo = True  # Bandera para indicar si se está mostrando el logo.
 
 # Cargar el modelo 3D
 mesh = o3d.io.read_triangle_mesh(objectreadfile, True)  # Lee el modelo 3D desde el archivo.
-mesh.compute_vertex_normals()  # Calcula las normales de los vértices del modelo 3D.
 # Crear la ventana de visualización del modelo 3D
 vis = o3d.visualization.Visualizer()  # Crea un visualizador de Open3D.
 vis.create_window(window_name="Open3D", width=1920, height=1080)
@@ -144,7 +143,6 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
 
 
     meshNew = o3d.io.read_triangle_mesh(objectreadfile, True)
-    meshNew.compute_vertex_normals()
     vis.remove_geometry(modelo_viejo)
     vis.add_geometry(meshNew)
     vis.get_view_control().set_zoom(0.7)
