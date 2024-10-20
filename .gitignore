@@ -10,6 +10,5 @@ icon.ico
 holograma.spec
 
 **/*.obj
-**/*.png
 
 PIEZAS/PIEZA17.obj
