@@ -9,18 +9,11 @@ import pygame
 import os
 import sys
 
-def resource_path(relative_path):
-    """Obtiene la ruta del archivo, ya sea en modo script o ejecutable."""
-    if getattr(sys, 'frozen', False):  # Si se ejecuta como un .exe
-        base_path = sys._MEIPASS  # Carpeta temporal donde PyInstaller descomprime los recursos
-    else:
-        base_path = os.path.dirname(os.path.abspath(__file__))  # Directorio del script
-    return os.path.join(base_path, relative_path)
-
 pygame.init()
 
-json_path = resource_path("render_options.json")
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+json_path = os.path.join(BASE_DIR, 'render_options.json')
 PIEZAS_PATH = os.path.join(BASE_DIR, "PIEZAS")
 AUDIOS_PATH = os.path.join(BASE_DIR, "AUDIOS")
 inicio = os.path.join(AUDIOS_PATH, "inicio.mp3")
@@ -114,7 +107,6 @@ moveZ = 0  # Movimiento actual en Z.
 newZ = True  # Bandera para indicar si el movimiento en Z es nuevo.
 refZ = 0  # Referencia de posición en Z.
 absZ = 0  # Posición absoluta en Z.
-zoomcounter = 0  # Contador para el zoom.
 
 
 def calc_distance(p1, p2):
@@ -154,7 +146,7 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
     return objectreadfile,meshNew
 
 def detect_finger_down(hand_landmarks):
-    print(".......................................................")
+    #print(".......................................................")
     finger_down = False
     x_base1 = int(hand_landmarks.landmark[0].x * cap_width)
     y_base1 = int(hand_landmarks.landmark[0].y * cap_height)
@@ -180,14 +172,14 @@ def detect_finger_down(hand_landmarks):
     d_base_pinky = calc_distance(p1, p2)
     d_base_anular = calc_distance(p1, p3)
     d_base_medio = calc_distance(p1, p4)
-    print(d_base_base)
-    print("------------------------------------")
-    print("Pinky ", d_base_pinky)
-    print("Anular ", d_base_anular)
-    print("Medio ", d_base_medio)
+    #print(d_base_base)
+    #print("------------------------------------")
+    #print("Pinky ", d_base_pinky)
+    #print("Anular ", d_base_anular)
+    #print("Medio ", d_base_medio)
     if d_base_anular < 40 and d_base_medio < 40 and d_base_pinky < 40:
         finger_down = True
-    print("---------------------")
+    #print("---------------------")
     return finger_down
 
 with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_confidence=0.8) as hands:
@@ -341,8 +333,8 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                             absZ = absZ - deltaZ
                             if absZ > 2.0:
                                 absZ = 2.0
-                            elif absZ < 0.6:
-                                absZ = 0.6
+                            elif absZ < 0.3:
+                                absZ = 0.5
                             moveZ = distpar
                             print(absZ)
                             vis.get_view_control().set_zoom(absZ)
@@ -358,35 +350,33 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                 hand_detection_counter += 1
                 tiempoPieza = 0
 
+                if hand_detection_counter >= 1000:
+                    for key in audios:
+                        pygame.mixer.music.stop()
+                        audios_cargados[key].stop()
+                    vis.remove_geometry(mesh)
+                    objectreadfile = os.path.join(PIEZAS_PATH, "prueba", "Green_Circle_0915213601.obj")
+                    mesh = o3d.io.read_triangle_mesh(objectreadfile, True)
+                    mesh.compute_vertex_normals()
+                    vis.add_geometry(mesh)
+                    vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+                    vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)
+                    vis.get_view_control().set_zoom(0.7)
+                    vis.poll_events()  # Procesa los eventos de la ventana.
+                    vis.update_renderer()  # Actualiza el renderizador.
+                    hand_detection_counter = 0
+                    logo = True
+                    print("Regresar inicio")
+
             ctrl = vis.get_view_control()
             ctrl.rotate(3, 0, xo=0.0, yo=0.0)
-            zoomcounter = zoomcounter + 1
-            if zoomcounter > 1000:
-                zoomcounter = 0
             vis.poll_events()
             vis.update_renderer()
             # Si no se detectan manos, rota el modelo 3D ligeramente.
 
-        if hand_detection_counter >= 1000 and not logo:
-            for key in audios:
-                pygame.mixer.music.stop()
-                audios_cargados[key].stop()
-            vis.remove_geometry(mesh)
-            objectreadfile = os.path.join(PIEZAS_PATH, "prueba", "Green_Circle_0915213601.obj")
-            mesh = o3d.io.read_triangle_mesh(objectreadfile, True)
-            mesh.compute_vertex_normals()
-            vis.add_geometry(mesh)
-            vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-            vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)
-            vis.get_view_control().set_zoom(0.7)
-            vis.poll_events()  # Procesa los eventos de la ventana.
-            vis.update_renderer()  # Actualiza el renderizador.
-            hand_detection_counter = 0
-            logo = True
-            print("Regresar inicio")
-
-        k = cv2.waitKey(1) & 0xFF
-        if k == 27:
+        if cv2.waitKey(5) & 0xFF == ord('q'):
+            print("Programa cerrado por el usuario.")
             break
+
 cap.release()
 cv2.destroyAllWindows()
