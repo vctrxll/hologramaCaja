@@ -7,7 +7,6 @@ import mediapipe as mp  # Importa 'mediapipe' para la detección y el seguimient
 import open3d as o3d  # Importa la biblioteca 'open3d' para trabajar con modelos 3D.
 import pygame
 import os
-import sys
 
 pygame.init()
 
@@ -150,7 +149,7 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
     return objectreadfile,meshNew
 
 def detect_finger_down(hand_landmarks):
-    #print(".......................................................")
+    print("-----------------------------")
     finger_down = False
     x_base1 = int(hand_landmarks.landmark[0].x * cap_width)
     y_base1 = int(hand_landmarks.landmark[0].y * cap_height)
@@ -176,17 +175,17 @@ def detect_finger_down(hand_landmarks):
     d_base_pinky = calc_distance(p1, p2)
     d_base_anular = calc_distance(p1, p3)
     d_base_medio = calc_distance(p1, p4)
-    #print(d_base_base)
-    #print("------------------------------------")
-    #print("Pinky ", d_base_pinky)
-    #print("Anular ", d_base_anular)
-    #print("Medio ", d_base_medio)
-    if d_base_anular < 40 and d_base_medio < 40 and d_base_pinky < 40:
+    print(d_base_base)
+    print("------------------------------------")
+    print("Pinky ", d_base_pinky)
+    print("Anular ", d_base_anular)
+    print("Medio ", d_base_medio)
+    if d_base_anular < 20 and d_base_medio < 20 and d_base_pinky < 20:
         finger_down = True
     #print("---------------------")
     return finger_down
 
-with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_confidence=0.8) as hands:
+with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.9, min_tracking_confidence=0.88) as hands:
     # Inicia el contexto del modelo de manos de MediaPipe con una confianza mínima de detección de 0.8 y una confianza mínima de seguimiento de 0.5.
 
     while cap.isOpened():
@@ -216,7 +215,6 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
         # Marca la imagen como escribible nuevamente y convierte de RGB a BGR.
 
         pos = (0, 0)
-        cv2.rectangle(image, pos, (frameWidth, frameHeight), (0, 0, 0), -1)
         # Dibuja un rectángulo negro que cubre toda la imagen.
 
         totalHands = 0
@@ -261,7 +259,17 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                     thumbTip = results.multi_hand_landmarks[0].landmark[mp_hands.HandLandmark.THUMB_TIP]
                     thumbTipXY = mp_drawing._normalized_to_pixel_coordinates(thumbTip.x, thumbTip.y, frameWidth,
                                                                              frameHeight)
+
+                    mp_drawing.draw_landmarks(
+                        image,
+                        hand,
+                        mp_hands.HAND_CONNECTIONS,
+                        mp_drawing.DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
+                        mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
+                    )
                     # Normaliza las coordenadas de los puntos de la mano a las coordenadas del píxel en la imagen.
+
+
 
                     if indexTipXY and thumbTipXY is not None:
                         indexXY = (indexTipXY[0], indexTipXY[1])
@@ -337,8 +345,8 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                             absZ = absZ - deltaZ
                             if absZ > 2.0:
                                 absZ = 2.0
-                            elif absZ < 0.3:
-                                absZ = 0.5
+                            elif absZ < 0.6:
+                                absZ = 0.6
                             moveZ = distpar
                             print(absZ)
                             vis.get_view_control().set_zoom(absZ)
@@ -377,7 +385,8 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
             vis.poll_events()
             vis.update_renderer()
             # Si no se detectan manos, rota el modelo 3D ligeramente.
-
+        if not isFullscreen:
+            cv2.imshow('MANO', image)
         if cv2.waitKey(5) & 0xFF == ord('q'):
             print("Programa cerrado por el usuario.")
             break
