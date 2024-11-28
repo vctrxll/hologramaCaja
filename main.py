@@ -7,14 +7,9 @@ import mediapipe as mp  # Importa 'mediapipe' para la detección y el seguimient
 import open3d as o3d  # Importa la biblioteca 'open3d' para trabajar con modelos 3D.
 import pygame
 import os
-import platform
-import tkinter as tk
-from tkinter import simpledialog, messagebox
 
 pygame.init()
 
-root = tk.Tk()
-root.withdraw()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(BASE_DIR, 'render_options.json')
@@ -89,39 +84,24 @@ vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del mode
 vis.poll_events()  # Procesa los eventos de la ventana.
 vis.update_renderer()  # Actualiza el renderizador.
 
-if platform.system() == "Linux":
-    # Cámaras
-    cap = cv2.VideoCapture(0)  # Abre la cámara con optimización (modo DirectShow).
-
-    if isFullscreen:
-        # Busca la ventana con título "Open3D"
-        window_id = os.popen("wmctrl -l | grep 'Open3D' | awk '{print $1}'").read().strip()
-        # Cambia la ventana a pantalla completa
-        os.system(f"wmctrl -ir {window_id} -b add,fullscreen")
-    print("Se está ejecutando en Linux")
-
-elif platform.system() == "Windows":
-    if makeoptimize:  # Verifica si se debe optimizar la captura de video.
-        cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)  # Abre la cámara con optimización (modo DirectShow).
-    else:
-        cap = cv2.VideoCapture(0)  # Abre la cámara sin optimización.
-
-    if isFullscreen:
-        import win32gui
-        import win32con
-        import win32api
-
-        hwnd = win32gui.FindWindow(None, 'Open3D')
-        win32gui.SetWindowLong(hwnd, win32con.GWL_STYLE, win32con.WS_POPUP | win32con.WS_VISIBLE)
-        win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1),
-                              win32con.SWP_FRAMECHANGED)
-    print("Se está ejecutando en Windows")
-else:
-    print("Se está ejecutando en otro sistema operativo")
+if isFullscreen:
+    hwnd = win32gui.FindWindow(None, 'Open3D')
+    win32gui.SetWindowLong(hwnd, win32con.GWL_STYLE, win32con.WS_POPUP | win32con.WS_VISIBLE)
+    win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1),
+                          win32con.SWP_FRAMECHANGED)
 
 print("Ejecutando...")  # Imprime un mensaje indicando que el programa está en ejecución.
+print(mp.__file__)
 mp_drawing = mp.solutions.drawing_utils  # Inicializa las utilidades de dibujo de MediaPipe.
 mp_hands = mp.solutions.hands  # Inicializa el módulo de detección de manos de MediaPipe.
+
+# Cámaras
+if makeoptimize:  # Verifica si se debe optimizar la captura de video.
+    cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)  # Abre la cámara con optimización (modo DirectShow).
+else:
+    cap = cv2.VideoCapture(0)  # Abre la cámara sin optimización.
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)  # Establece el ancho del cuadro de video en 640 píxeles.
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)  # Establece la altura del cuadro de video en 360 píxeles.
 
 # Inicialización de variables para el seguimiento de gestos y el control de la cámara.
 moveX = 0  # Movimiento actual en X.
@@ -410,7 +390,6 @@ with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_conf
         if cv2.waitKey(5) & 0xFF == ord('q'):
             print("Programa cerrado por el usuario.")
             break
-    messagebox.showinfo("Información", "Esto es un mensaje informativo.")
 
 cap.release()
 cv2.destroyAllWindows()
