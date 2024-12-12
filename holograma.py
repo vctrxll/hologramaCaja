@@ -1,8 +1,6 @@
 from math import sqrt  # Importa sqrt de la biblioteca 'math' para calcular raíces cuadradas.
 import cv2
-import win32gui
-import win32con
-import win32api
+
 import mediapipe as mp  # Importa 'mediapipe' para la detección y el seguimiento de manos.
 import open3d as o3d  # Importa la biblioteca 'open3d' para trabajar con modelos 3D.
 import pygame
@@ -101,6 +99,9 @@ if platform.system() == "Linux":
     print("Se está ejecutando en Linux")
 
 elif platform.system() == "Windows":
+    import win32gui
+    import win32con
+    import win32api
     if makeoptimize:  # Verifica si se debe optimizar la captura de video.
         cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)  # Abre la cámara con optimización (modo DirectShow).
     else:
