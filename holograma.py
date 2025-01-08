@@ -1,13 +1,12 @@
 from math import sqrt  # Importa sqrt de la biblioteca 'math' para calcular raíces cuadradas.
 import cv2
-
 import mediapipe as mp  # Importa 'mediapipe' para la detección y el seguimiento de manos.
 import open3d as o3d  # Importa la biblioteca 'open3d' para trabajar con modelos 3D.
 import pygame
 import os
 import platform
 import tkinter as tk
-from tkinter import simpledialog, messagebox
+from tkinter import messagebox
 
 pygame.init()
 
@@ -18,7 +17,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(BASE_DIR, 'render_options.json')
 PIEZAS_PATH = os.path.join(BASE_DIR, "PIEZAS")
 AUDIOS_PATH = os.path.join(BASE_DIR, "AUDIOS")
-inicio = os.path.join(AUDIOS_PATH, "inicio.mp3")
+INICIO_PATH = os.path.join(BASE_DIR, "INICIO")
+
 
 
 archivos = {
@@ -61,7 +61,7 @@ audios_cargados = {k: pygame.mixer.Sound(v) for k, v in audios.items()}
 # Inicialización de variables y configuración
 tiempoPieza = 0
 hand_detection_counter = 0  # Contador para el número de frames sin detección de manos.
-objectreadfile = os.path.join(PIEZAS_PATH, "prueba", "Green_Circle_0915213601.obj")
+objectreadfile = os.path.join(INICIO_PATH, "Green_Circle_0915213601.obj")
 
 
 isoptimized = "SI"  # Cadena que indica si la optimización está habilitada.
@@ -82,8 +82,8 @@ vis.create_window(window_name="Open3D", width=960, height=540)
 vis.add_geometry(mesh)  # Añade el modelo 3D a la ventana de visualización.
 vis.get_render_option().load_from_json(json_path)  # Carga las opciones de renderización desde un archivo JSON.
 vis.get_view_control().set_zoom(0.7)  # Establece el nivel de zoom de la vista.
-vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+#vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+#vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
 vis.poll_events()  # Procesa los eventos de la ventana.
 vis.update_renderer()  # Actualiza el renderizador.
 
@@ -99,9 +99,6 @@ if platform.system() == "Linux":
     print("Se está ejecutando en Linux")
 
 elif platform.system() == "Windows":
-    import win32gui
-    import win32con
-    import win32api
     if makeoptimize:  # Verifica si se debe optimizar la captura de video.
         cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)  # Abre la cámara con optimización (modo DirectShow).
     else:
@@ -143,30 +140,25 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
         next_index = (current_index + 1) % len(archivos)
         if current_index == 0:
             pygame.mixer.music.stop()
-            audios_cargados[current_index].stop()
-            audios_cargados[next_index].play()
-        else:
-            audios_cargados[current_index].stop()
-            audios_cargados[next_index].play()
+        audios_cargados[current_index].stop()
+        audios_cargados[next_index].play()
         objectreadfile = list(archivos.values())[next_index]
+        audioreadfile = list(archivos.values())[next_index]
     else:
-
-        pygame.mixer.music.load(inicio)  # Asegúrate de que la extensión del archivo sea correcta
-        # Reproduce el archivo de audio
-        pygame.mixer.music.play()
         objectreadfile = list(archivos.values())[0]
-        #audios_cargados[0].play()
+        audios_cargados[0].play()
 
 
     meshNew = o3d.io.read_triangle_mesh(objectreadfile, True)
     vis.remove_geometry(modelo_viejo)
     vis.add_geometry(meshNew)
     vis.get_view_control().set_zoom(0.7)
-    vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-    vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+    #vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+    #vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
     vis.poll_events()  # Procesa los eventos de la ventana.
     vis.update_renderer()  # Actualiza el renderizador.
     print(f" Pieza cambiada a '{objectreadfile}'")
+    #print(f" audio en reproduccion '{audioreadfile}'")
     return objectreadfile,meshNew
 
 def detect_finger_down(hand_landmarks):
@@ -311,7 +303,7 @@ with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_conf
                                 print("Max reached: " + str(deltaX) + "," + str(deltaY))
                             else:
                                 #print(str(deltaX) + "," + str(deltaY))
-                                vis.get_view_control().rotate(-deltaX * 8, deltaY * 8, xo=0.0, yo=0.0)
+                                vis.get_view_control().rotate(deltaX * 8, -deltaY * 8, xo=0.0, yo=0.0)
                                 vis.poll_events()
                                 vis.update_renderer()
                             # Si la distancia es menor que 50, mueve la vista del modelo 3D de acuerdo con los movimientos detectados.
@@ -338,8 +330,6 @@ with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_conf
                     if indexTip and indexTipXY and thumbTipXY is not None:
                         indexXY = (indexTipXY[0], indexTipXY[1])
                         thumbXY = (thumbTipXY[0], thumbTipXY[1])
-                        cv2.circle(image, indexXY, 10, (255, 0, 0), 2)
-                        cv2.circle(image, thumbXY, 10, (255, 0, 0), 2)
                         dist = calc_distance(indexXY, thumbXY)
                         # Dibuja círculos en la punta del índice y el pulgar y calcula la distancia entre ellos.
 
@@ -388,12 +378,12 @@ with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_conf
                         pygame.mixer.music.stop()
                         audios_cargados[key].stop()
                     vis.remove_geometry(mesh)
-                    objectreadfile = os.path.join(PIEZAS_PATH, "prueba", "Green_Circle_0915213601.obj")
+                    objectreadfile = os.path.join(INICIO_PATH, "Green_Circle_0915213601.obj")
                     mesh = o3d.io.read_triangle_mesh(objectreadfile, True)
                     mesh.compute_vertex_normals()
                     vis.add_geometry(mesh)
-                    vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-                    vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)
+                    #vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+                    #vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)
                     vis.get_view_control().set_zoom(0.7)
                     vis.poll_events()  # Procesa los eventos de la ventana.
                     vis.update_renderer()  # Actualiza el renderizador.

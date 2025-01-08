@@ -8,5 +8,7 @@ __pycache__/
 build/
 icon.ico
 holograma.spec
-
+hands_3d1.py
 PIEZAS/PIEZA17.obj
+PIEZAS/17.obj
+pruebasFicheros.py
