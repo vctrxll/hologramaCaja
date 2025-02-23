@@ -1,1 +1,2 @@
 https://drive.google.com/drive/folders/1LiENK8CoEPYM5OQyRIMKGIxyhjOGvgfC?usp=drive_link
+pyinstaller --noconsole --add-data "PIEZAS;PIEZAS" --add-data "AUDIOS;AUDIOS" --add-data "render_options.json;." .\holograma.py

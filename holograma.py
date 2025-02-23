@@ -1,29 +1,24 @@
 from math import sqrt  # Importa sqrt de la biblioteca 'math' para calcular raíces cuadradas.
 import cv2
-import win32gui
-import win32con
-import win32api
 import mediapipe as mp  # Importa 'mediapipe' para la detección y el seguimiento de manos.
 import open3d as o3d  # Importa la biblioteca 'open3d' para trabajar con modelos 3D.
 import pygame
 import os
-import sys
-
-def resource_path(relative_path):
-    """Obtiene la ruta del archivo, ya sea en modo script o ejecutable."""
-    if getattr(sys, 'frozen', False):  # Si se ejecuta como un .exe
-        base_path = sys._MEIPASS  # Carpeta temporal donde PyInstaller descomprime los recursos
-    else:
-        base_path = os.path.dirname(os.path.abspath(__file__))  # Directorio del script
-    return os.path.join(base_path, relative_path)
+import platform
+import tkinter as tk
+from tkinter import messagebox
 
 pygame.init()
 
-json_path = resource_path("render_options.json")
+root = tk.Tk()
+root.withdraw()
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+json_path = os.path.join(BASE_DIR, 'render_options.json')
 PIEZAS_PATH = os.path.join(BASE_DIR, "PIEZAS")
 AUDIOS_PATH = os.path.join(BASE_DIR, "AUDIOS")
-inicio = os.path.join(AUDIOS_PATH, "inicio.mp3")
+INICIO_PATH = os.path.join(BASE_DIR, "INICIO")
+
 
 
 archivos = {
@@ -66,7 +61,7 @@ audios_cargados = {k: pygame.mixer.Sound(v) for k, v in audios.items()}
 # Inicialización de variables y configuración
 tiempoPieza = 0
 hand_detection_counter = 0  # Contador para el número de frames sin detección de manos.
-objectreadfile = os.path.join(PIEZAS_PATH, "prueba", "Green_Circle_0915213601.obj")
+objectreadfile = os.path.join(INICIO_PATH, "Green_Circle_0915213601.obj")
 
 
 isoptimized = "SI"  # Cadena que indica si la optimización está habilitada.
@@ -76,36 +71,55 @@ makeoptimize = isoptimized == "SI"  # Convierte la cadena en una variable boolea
 cap_width = 640
 cap_height = 360
 logo = True  # Bandera para indicar si se está mostrando el logo.
+isFullscreen = True
 
 
 # Cargar el modelo 3D
 mesh = o3d.io.read_triangle_mesh(objectreadfile, True)  # Lee el modelo 3D desde el archivo.
 # Crear la ventana de visualización del modelo 3D
 vis = o3d.visualization.Visualizer()  # Crea un visualizador de Open3D.
-vis.create_window(window_name="Open3D", width=1920, height=1080)
+vis.create_window(window_name="Open3D", width=960, height=540)
 vis.add_geometry(mesh)  # Añade el modelo 3D a la ventana de visualización.
 vis.get_render_option().load_from_json(json_path)  # Carga las opciones de renderización desde un archivo JSON.
 vis.get_view_control().set_zoom(0.7)  # Establece el nivel de zoom de la vista.
-vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+#vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+#vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
 vis.poll_events()  # Procesa los eventos de la ventana.
 vis.update_renderer()  # Actualiza el renderizador.
-hwnd = win32gui.FindWindow(None, 'Open3D')
-win32gui.SetWindowLong(hwnd, win32con.GWL_STYLE, win32con.WS_POPUP | win32con.WS_VISIBLE)
-win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1), win32con.SWP_FRAMECHANGED)
+
+if platform.system() == "Linux":
+    # Cámaras
+    cap = cv2.VideoCapture(0)  # Abre la cámara con optimización (modo DirectShow).
+
+    if isFullscreen:
+        # Busca la ventana con título "Open3D"
+        window_id = os.popen("wmctrl -l | grep 'Open3D' | awk '{print $1}'").read().strip()
+        # Cambia la ventana a pantalla completa
+        os.system(f"wmctrl -ir {window_id} -b add,fullscreen")
+    print("Se está ejecutando en Linux")
+
+elif platform.system() == "Windows":
+    if makeoptimize:  # Verifica si se debe optimizar la captura de video.
+        cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)  # Abre la cámara con optimización (modo DirectShow).
+    else:
+        cap = cv2.VideoCapture(0)  # Abre la cámara sin optimización.
+
+    if isFullscreen:
+        import win32gui
+        import win32con
+        import win32api
+
+        hwnd = win32gui.FindWindow(None, 'Open3D')
+        win32gui.SetWindowLong(hwnd, win32con.GWL_STYLE, win32con.WS_POPUP | win32con.WS_VISIBLE)
+        win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1),
+                              win32con.SWP_FRAMECHANGED)
+    print("Se está ejecutando en Windows")
+else:
+    print("Se está ejecutando en otro sistema operativo")
 
 print("Ejecutando...")  # Imprime un mensaje indicando que el programa está en ejecución.
-print(mp.__file__)
 mp_drawing = mp.solutions.drawing_utils  # Inicializa las utilidades de dibujo de MediaPipe.
 mp_hands = mp.solutions.hands  # Inicializa el módulo de detección de manos de MediaPipe.
-
-# Cámaras
-if makeoptimize:  # Verifica si se debe optimizar la captura de video.
-    cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)  # Abre la cámara con optimización (modo DirectShow).
-else:
-    cap = cv2.VideoCapture(0)  # Abre la cámara sin optimización.
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)  # Establece el ancho del cuadro de video en 640 píxeles.
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)  # Establece la altura del cuadro de video en 360 píxeles.
 
 # Inicialización de variables para el seguimiento de gestos y el control de la cámara.
 moveX = 0  # Movimiento actual en X.
@@ -114,7 +128,6 @@ moveZ = 0  # Movimiento actual en Z.
 newZ = True  # Bandera para indicar si el movimiento en Z es nuevo.
 refZ = 0  # Referencia de posición en Z.
 absZ = 0  # Posición absoluta en Z.
-zoomcounter = 0  # Contador para el zoom.
 
 
 def calc_distance(p1, p2):
@@ -127,34 +140,29 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
         next_index = (current_index + 1) % len(archivos)
         if current_index == 0:
             pygame.mixer.music.stop()
-            audios_cargados[current_index].stop()
-            audios_cargados[next_index].play()
-        else:
-            audios_cargados[current_index].stop()
-            audios_cargados[next_index].play()
+        audios_cargados[current_index].stop()
+        audios_cargados[next_index].play()
         objectreadfile = list(archivos.values())[next_index]
+        audioreadfile = list(archivos.values())[next_index]
     else:
-
-        pygame.mixer.music.load(inicio)  # Asegúrate de que la extensión del archivo sea correcta
-        # Reproduce el archivo de audio
-        pygame.mixer.music.play()
         objectreadfile = list(archivos.values())[0]
-        #audios_cargados[0].play()
+        audios_cargados[0].play()
 
 
     meshNew = o3d.io.read_triangle_mesh(objectreadfile, True)
     vis.remove_geometry(modelo_viejo)
     vis.add_geometry(meshNew)
     vis.get_view_control().set_zoom(0.7)
-    vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-    vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+    #vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+    #vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
     vis.poll_events()  # Procesa los eventos de la ventana.
     vis.update_renderer()  # Actualiza el renderizador.
     print(f" Pieza cambiada a '{objectreadfile}'")
+    #print(f" audio en reproduccion '{audioreadfile}'")
     return objectreadfile,meshNew
 
 def detect_finger_down(hand_landmarks):
-    print(".......................................................")
+    print("-----------------------------")
     finger_down = False
     x_base1 = int(hand_landmarks.landmark[0].x * cap_width)
     y_base1 = int(hand_landmarks.landmark[0].y * cap_height)
@@ -185,12 +193,12 @@ def detect_finger_down(hand_landmarks):
     print("Pinky ", d_base_pinky)
     print("Anular ", d_base_anular)
     print("Medio ", d_base_medio)
-    if d_base_anular < 40 and d_base_medio < 40 and d_base_pinky < 40:
+    if d_base_anular < 30 and d_base_medio < 30 and d_base_pinky < 30:
         finger_down = True
     print("---------------------")
     return finger_down
 
-with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_confidence=0.8) as hands:
+with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.9, min_tracking_confidence=0.88) as hands:
     # Inicia el contexto del modelo de manos de MediaPipe con una confianza mínima de detección de 0.8 y una confianza mínima de seguimiento de 0.5.
 
     while cap.isOpened():
@@ -220,7 +228,6 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
         # Marca la imagen como escribible nuevamente y convierte de RGB a BGR.
 
         pos = (0, 0)
-        cv2.rectangle(image, pos, (frameWidth, frameHeight), (0, 0, 0), -1)
         # Dibuja un rectángulo negro que cubre toda la imagen.
 
         totalHands = 0
@@ -265,7 +272,17 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                     thumbTip = results.multi_hand_landmarks[0].landmark[mp_hands.HandLandmark.THUMB_TIP]
                     thumbTipXY = mp_drawing._normalized_to_pixel_coordinates(thumbTip.x, thumbTip.y, frameWidth,
                                                                              frameHeight)
+
+                    mp_drawing.draw_landmarks(
+                        image,
+                        hand,
+                        mp_hands.HAND_CONNECTIONS,
+                        mp_drawing.DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
+                        mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
+                    )
                     # Normaliza las coordenadas de los puntos de la mano a las coordenadas del píxel en la imagen.
+
+
 
                     if indexTipXY and thumbTipXY is not None:
                         indexXY = (indexTipXY[0], indexTipXY[1])
@@ -286,7 +303,7 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                                 print("Max reached: " + str(deltaX) + "," + str(deltaY))
                             else:
                                 #print(str(deltaX) + "," + str(deltaY))
-                                vis.get_view_control().rotate(-deltaX * 8, deltaY * 8, xo=0.0, yo=0.0)
+                                vis.get_view_control().rotate(deltaX * 8, -deltaY * 8, xo=0.0, yo=0.0)
                                 vis.poll_events()
                                 vis.update_renderer()
                             # Si la distancia es menor que 50, mueve la vista del modelo 3D de acuerdo con los movimientos detectados.
@@ -313,8 +330,6 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                     if indexTip and indexTipXY and thumbTipXY is not None:
                         indexXY = (indexTipXY[0], indexTipXY[1])
                         thumbXY = (thumbTipXY[0], thumbTipXY[1])
-                        cv2.circle(image, indexXY, 10, (255, 0, 0), 2)
-                        cv2.circle(image, thumbXY, 10, (255, 0, 0), 2)
                         dist = calc_distance(indexXY, thumbXY)
                         # Dibuja círculos en la punta del índice y el pulgar y calcula la distancia entre ellos.
 
@@ -358,35 +373,35 @@ with mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.8, min_tracking_
                 hand_detection_counter += 1
                 tiempoPieza = 0
 
+                if hand_detection_counter >= 1000:
+                    for key in audios:
+                        pygame.mixer.music.stop()
+                        audios_cargados[key].stop()
+                    vis.remove_geometry(mesh)
+                    objectreadfile = os.path.join(INICIO_PATH, "Green_Circle_0915213601.obj")
+                    mesh = o3d.io.read_triangle_mesh(objectreadfile, True)
+                    mesh.compute_vertex_normals()
+                    vis.add_geometry(mesh)
+                    #vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+                    #vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)
+                    vis.get_view_control().set_zoom(0.7)
+                    vis.poll_events()  # Procesa los eventos de la ventana.
+                    vis.update_renderer()  # Actualiza el renderizador.
+                    hand_detection_counter = 0
+                    logo = True
+                    print("Regresar inicio")
+
             ctrl = vis.get_view_control()
             ctrl.rotate(3, 0, xo=0.0, yo=0.0)
-            zoomcounter = zoomcounter + 1
-            if zoomcounter > 1000:
-                zoomcounter = 0
             vis.poll_events()
             vis.update_renderer()
             # Si no se detectan manos, rota el modelo 3D ligeramente.
-
-        if hand_detection_counter >= 1000 and not logo:
-            for key in audios:
-                pygame.mixer.music.stop()
-                audios_cargados[key].stop()
-            vis.remove_geometry(mesh)
-            objectreadfile = os.path.join(PIEZAS_PATH, "prueba", "Green_Circle_0915213601.obj")
-            mesh = o3d.io.read_triangle_mesh(objectreadfile, True)
-            mesh.compute_vertex_normals()
-            vis.add_geometry(mesh)
-            vis.get_view_control().rotate(300, 1000, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-            vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)
-            vis.get_view_control().set_zoom(0.7)
-            vis.poll_events()  # Procesa los eventos de la ventana.
-            vis.update_renderer()  # Actualiza el renderizador.
-            hand_detection_counter = 0
-            logo = True
-            print("Regresar inicio")
-
-        k = cv2.waitKey(1) & 0xFF
-        if k == 27:
+        if not isFullscreen:
+            cv2.imshow('MANO', image)
+        if cv2.waitKey(5) & 0xFF == ord('q'):
+            print("Programa cerrado por el usuario.")
             break
+    messagebox.showinfo("Información", "Esto es un mensaje informativo.")
+
 cap.release()
 cv2.destroyAllWindows()
