@@ -3,6 +3,7 @@ dist/
 __pycache__
 assets/
 __pycache__/
+
 .idea/
 build/
 icon.ico
@@ -10,3 +11,4 @@ holograma.spec
 hands_3d1.py
 source/PIEZA17
 pruebasFicheros.py
+PIEZAS/
