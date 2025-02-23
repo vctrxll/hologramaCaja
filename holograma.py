@@ -15,32 +15,24 @@ root.withdraw()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(BASE_DIR, 'render_options.json')
-PIEZAS_PATH = os.path.join(BASE_DIR, "PIEZAS")
+PIEZAS_PATH = os.path.join(BASE_DIR, "source")
 AUDIOS_PATH = os.path.join(BASE_DIR, "AUDIOS")
 INICIO_PATH = os.path.join(BASE_DIR, "INICIO")
 
 
 
 archivos = {
-    # cara
-    0: os.path.join(PIEZAS_PATH, "3.obj"),
-    # tres patas
-    1: os.path.join(PIEZAS_PATH, "pieza6.obj"),
-    # pichinche
-    2: os.path.join(PIEZAS_PATH, "pieza8.obj"),
-    # rojoo
-    3: os.path.join(PIEZAS_PATH, "6.obj"),
-    # rana
-    4: os.path.join(PIEZAS_PATH, "2.obj"),
-    5: os.path.join(PIEZAS_PATH, "cajete-rojo.obj"),
-    # tres patas blanco
-    6: os.path.join(PIEZAS_PATH, "pieza10.obj"),
-    # olla fea
-    7: os.path.join(PIEZAS_PATH, "olla-matada.obj"),
-    # copa fea
-    8: os.path.join(PIEZAS_PATH, "pieza1.obj"),
-    # tres patas rojo feo
-    9: os.path.join(PIEZAS_PATH, "5.obj"),
+
+    0: os.path.join(PIEZAS_PATH, "patas", "tripie.obj"),
+    1: os.path.join(PIEZAS_PATH, "PIEZA2exhibicion2025", "PIEZA8.obj"),
+    2: os.path.join(PIEZAS_PATH, "PIEZA42025", "PIEZA1.obj"),
+    3: os.path.join(PIEZAS_PATH, "5", "5.obj"),
+    4: os.path.join(PIEZAS_PATH, "pieza10", "PIEZA10.obj"),
+    5: os.path.join(PIEZAS_PATH, "pieza6", "PIEZA6.obj"),
+    6: os.path.join(PIEZAS_PATH, "ondo", "sss.obj"),
+    7: os.path.join(PIEZAS_PATH, "Pieza9exhibicion2025", "eee.obj"),
+    8: os.path.join(PIEZAS_PATH, "jarrita", "jarra.obj"),
+    9: os.path.join(PIEZAS_PATH, "PIEZA16", "PIEZA16.obj"),
 }
 
 # Diccionario de archivos de audio
