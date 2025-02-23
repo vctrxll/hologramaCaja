@@ -8,5 +8,7 @@ __pycache__/
 build/
 icon.ico
 holograma.spec
-
+source/PIEZA17/
 PIEZAS/PIEZA17.obj
+pruebasFicheros.py
+venv/
