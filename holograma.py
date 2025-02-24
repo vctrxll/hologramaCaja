@@ -1,10 +1,13 @@
-from math import sqrt  # Importa sqrt de la biblioteca 'math' para calcular raíces cuadradas.
+from math import sqrt
 import cv2
 import mediapipe as mp  # Importa 'mediapipe' para la detección y el seguimiento de manos.
 import open3d as o3d  # Importa la biblioteca 'open3d' para trabajar con modelos 3D.
-import pygame
 import os
 import platform
+import time
+import subprocess
+import pygame
+import pygetwindow as gw
 import tkinter as tk
 from tkinter import messagebox
 
@@ -127,31 +130,45 @@ def calc_distance(p1, p2):
         (p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)  # Calcula la distancia euclidiana entre dos puntos p1 y p2.
 
 def cambiarObj(vis, modelo_viejo, objectreadfile):
+    directorio = os.path.join(os.getcwd(), 'sub', 'espanol')
+    print(directorio)
+
     if objectreadfile in archivos.values():
         current_index = list(archivos.values()).index(objectreadfile)
         next_index = (current_index + 1) % len(archivos)
         if current_index == 0:
             pygame.mixer.music.stop()
         audios_cargados[current_index].stop()
+        subtitulos = gw.getWindowsWithTitle("pygame window")
+        if subtitulos:
+            pygame_window = subtitulos[0]  # Si hay múltiples ventanas, tomamos la primera
+            pygame_window.close()
+        else:
+            print("No se encontró una ventana llamada 'pygame window'.")
+            # -------------------
+        script = f"{next_index}.py"
+        # Ejecutar el archivo .py con Popen
+        proces = subprocess.Popen(['python', script], cwd=directorio)
+
         audios_cargados[next_index].play()
         objectreadfile = list(archivos.values())[next_index]
         audioreadfile = list(archivos.values())[next_index]
     else:
         objectreadfile = list(archivos.values())[0]
         audios_cargados[0].play()
-
+        proces = subprocess.Popen(['python', "0.py"], cwd=directorio)
 
     meshNew = o3d.io.read_triangle_mesh(objectreadfile, True)
     vis.remove_geometry(modelo_viejo)
     vis.add_geometry(meshNew)
     vis.get_view_control().set_zoom(0.7)
-    #vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
-    #vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+    # vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
+    # vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
     vis.poll_events()  # Procesa los eventos de la ventana.
     vis.update_renderer()  # Actualiza el renderizador.
     print(f" Pieza cambiada a '{objectreadfile}'")
-    #print(f" audio en reproduccion '{audioreadfile}'")
-    return objectreadfile,meshNew
+    # print(f" audio en reproduccion '{audioreadfile}'")
+    return objectreadfile, meshNew
 
 def detect_finger_down(hand_landmarks):
     print("-----------------------------")
