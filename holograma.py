@@ -140,18 +140,17 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
         if current_index == 0:
             pygame.mixer.music.stop()
         audios_cargados[current_index].stop()
-        script = f"{next_index}.py"
-        print(script)
-        # Ejecutar el archivo .py con Popen
-        proces = subprocess.Popen(['python', script], cwd=directorio)
+
         subtitulos = gw.getWindowsWithTitle("pygame window")
         if subtitulos:
             pygame_window = subtitulos[0]  # Si hay múltiples ventanas, tomamos la primera
-            #pygame_window.close()
+            pygame_window.close()
         else:
             print("No se encontró una ventana llamada 'pygame window'.")
-            # -------------------
-
+        # -------------------
+        script = f"{next_index}.py"
+        # Ejecutar el archivo .py con Popen
+        proces = subprocess.Popen(['python', script], cwd=directorio)
 
         audios_cargados[next_index].play()
         objectreadfile = list(archivos.values())[next_index]
