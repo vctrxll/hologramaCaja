@@ -3,3 +3,4 @@ mediapipe
 open3d
 pygame
 pywin32
+pygetwindow

@@ -163,7 +163,7 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
     meshNew = o3d.io.read_triangle_mesh(objectreadfile, True)
     vis.remove_geometry(modelo_viejo)
     vis.add_geometry(meshNew)
-    vis.get_view_control().set_zoom(0.7)
+    vis.get_view_control().set_zoom(1)
     # vis.get_view_control().rotate(300, 1200, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
     # vis.get_view_control().rotate(1000, 0, xo=0.0, yo=0.0)  # Rota la vista del modelo 3D.
     vis.poll_events()  # Procesa los eventos de la ventana.
