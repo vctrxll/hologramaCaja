@@ -19,38 +19,39 @@ root.withdraw()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(BASE_DIR, 'render_options.json')
 PIEZAS_PATH = os.path.join(BASE_DIR, "source")
-AUDIOS_PATH = os.path.join(BASE_DIR, "AUDIOS")
+AUDIOS_PATH = os.path.join(BASE_DIR, "AUDIOS", "2025")
 INICIO_PATH = os.path.join(BASE_DIR, "INICIO")
 
 
 
 archivos = {
 
-    0: os.path.join(PIEZAS_PATH, "patas", "tripie.obj"),
-    1: os.path.join(PIEZAS_PATH, "PIEZA2exhibicion2025", "PIEZA8.obj"),
-    2: os.path.join(PIEZAS_PATH, "PIEZA42025", "PIEZA1.obj"),
-    3: os.path.join(PIEZAS_PATH, "5", "5.obj"),
-    4: os.path.join(PIEZAS_PATH, "pieza10", "PIEZA10.obj"),
-    5: os.path.join(PIEZAS_PATH, "pieza6", "PIEZA6.obj"),
-    6: os.path.join(PIEZAS_PATH, "ondo", "sss.obj"),
-    7: os.path.join(PIEZAS_PATH, "Pieza9exhibicion2025", "eee.obj"),
-    8: os.path.join(PIEZAS_PATH, "jarrita", "jarra.obj"),
-    9: os.path.join(PIEZAS_PATH, "PIEZA16", "PIEZA16.obj"),
+    0: os.path.join(PIEZAS_PATH, "patas", "tripie.obj"), #CAJETE GRIS TRÍPODE CON SOPORTES DE SERPIENTE
+    1: os.path.join(PIEZAS_PATH, "PIEZA2exhibicion2025", "PIEZA8.obj"), #CAJETE GRIS DE SILUETA COMPUESTA TRÍPODE.
+    2: os.path.join(PIEZAS_PATH, "PIEZA42025", "PIEZA1.obj"),#JARRA DE CUERPO ELIPSOIDAL
+    3: os.path.join(PIEZAS_PATH, "5", "5.obj"),#VASO POLÍCROMO TRÍPODE
+    4: os.path.join(PIEZAS_PATH, "pieza10", "PIEZA10.obj"), #CAJETE TRÍPODE DE FONDO SELLADO
+    5: os.path.join(PIEZAS_PATH, "pieza6", "PIEZA6.obj"), #OLLA BAJA POLICROMA TRÍPODE
+    6: os.path.join(PIEZAS_PATH, "ondo", "sss.obj"),#COPA DE SILUETA COMPUESTA CON BASE DE PEDESTAL
+    7: os.path.join(PIEZAS_PATH, "Pieza9exhibicion2025", "eee.obj"),#OLLA MINIATURA
+    8: os.path.join(PIEZAS_PATH, "jarrita", "jarra.obj"),#OLLA MINIATURA
+    9: os.path.join(PIEZAS_PATH, "PIEZA16", "PIEZA16.obj"),#COPA DE SILUETA COMPUESTA CON BASE DE PEDESTAL
 }
 
 # Diccionario de archivos de audio
 audios = {
-    0: os.path.join(AUDIOS_PATH, "6.mp3"),
-    1: os.path.join(AUDIOS_PATH, "7.mp3"),
-    2: os.path.join(AUDIOS_PATH, "11.mp3"),
-    3: os.path.join(AUDIOS_PATH, "8.mp3"),
-    4: os.path.join(AUDIOS_PATH, "10.mp3"),
-    5: os.path.join(AUDIOS_PATH, "9.mp3"),
-    6: os.path.join(AUDIOS_PATH, "1.mp3"),
-    7: os.path.join(AUDIOS_PATH, "4.mp3"),
-    8: os.path.join(AUDIOS_PATH, "2.mp3"),
-    9: os.path.join(AUDIOS_PATH, "5.mp3"),
+    0: os.path.join(AUDIOS_PATH, "0.mp3"),
+    1: os.path.join(AUDIOS_PATH, "1.mp3"),
+    2: os.path.join(AUDIOS_PATH, "2.mp3"),
+    3: os.path.join(AUDIOS_PATH, "3.mp3"),
+    4: os.path.join(AUDIOS_PATH, "4.mp3"),
+    5: os.path.join(AUDIOS_PATH, "5.mp3"),
+    6: os.path.join(AUDIOS_PATH, "6.mp3"),
+    7: os.path.join(AUDIOS_PATH, "7.mp3"),
+    8: os.path.join(AUDIOS_PATH, "8.mp3"),
+    9: os.path.join(AUDIOS_PATH, "9.mp3"),
 }
+
 
 audios_cargados = {k: pygame.mixer.Sound(v) for k, v in audios.items()}
 # Inicialización de variables y configuración
@@ -130,7 +131,7 @@ def calc_distance(p1, p2):
         (p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)  # Calcula la distancia euclidiana entre dos puntos p1 y p2.
 
 def cambiarObj(vis, modelo_viejo, objectreadfile):
-    directorio = os.path.join(os.getcwd(), 'sub', 'espanol')
+    directorio = os.path.join(os.getcwd(), 'sub')
     print(directorio)
 
     if objectreadfile in archivos.values():
@@ -139,16 +140,18 @@ def cambiarObj(vis, modelo_viejo, objectreadfile):
         if current_index == 0:
             pygame.mixer.music.stop()
         audios_cargados[current_index].stop()
+        script = f"{next_index}.py"
+        print(script)
+        # Ejecutar el archivo .py con Popen
+        proces = subprocess.Popen(['python', script], cwd=directorio)
         subtitulos = gw.getWindowsWithTitle("pygame window")
         if subtitulos:
             pygame_window = subtitulos[0]  # Si hay múltiples ventanas, tomamos la primera
-            pygame_window.close()
+            #pygame_window.close()
         else:
             print("No se encontró una ventana llamada 'pygame window'.")
             # -------------------
-        script = f"{next_index}.py"
-        # Ejecutar el archivo .py con Popen
-        proces = subprocess.Popen(['python', script], cwd=directorio)
+
 
         audios_cargados[next_index].play()
         objectreadfile = list(archivos.values())[next_index]

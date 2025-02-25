@@ -19,24 +19,25 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/PEDANTE FENICIO DE CRISTAL.mp3"
+audio_path = "../AUDIOS/2025/0.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-    0: "Aquí tenemos un pedante fenicio de cristal en forma de cabeza barbuda...",
-    5: "... originario de Cartago y datado en los siglos IV a III a.C.",
-    10: "Actualmente, esta pieza está expuesta en el Museo Nacional del Bardo en Túnez...",
-    15: "... y es un ejemplo exquisito de la maestría en el trabajo del vidrio de los fenicios.",
-    20: "Una técnica que alcanzaron con gran perfección...",
-    25: "... y que refleja la sofisticación de su cultura.",
-    30: "La representación de la barba puede indicar sabiduría o autoridad...",
-    35: "... rasgos valorados en muchas culturas antiguas.",
-    40: "Este colgante no solo demuestra la habilidad artesanal fenicia...",
-    45: "... sino que también ofrece una ventana a las prácticas espirituales y la vida cotidiana en la antigua Cartago.",
-    50: "Revela la importancia de los amuletos y la simbología religiosa en esta civilización marítima avanzada...",
-    55: "... sirviendo como un puente entre el pasado remoto y el presente."
+    0: "CAJETE GRIS TRÍPODE CON SOPORTES DE SERPIENTE",
+    2: "un cajete elaborado en arcilla gris fina.",
+    7: "Su diseño destaca por el uso de moldes para crear relieves de serpientes en los soportes",
+    12: "un motivo que simboliza la conexión entre la vida y el más allá. ",
+    18: "Esta vasija pertenece a la tradición del Posclásico en Oaxaca",
+    22: "y fue confeccionada con una pasta única",
+    26: " utilizada por grupos indígenas como los chinantecos y mazatecos",
+    30: "Se han encontrado ejemplares similares en importantes centros ceremoniales, ",
+    35: "lo que sugiere vínculos culturales con otras civilizaciones prehispánicas.",
+    40: "Además, su hallazgo en contextos funerarios resalta su función ritual y espiritual",
+    47: "Descubran cómo cada detalle de esta pieza narra historias del pasado",
+    51: "y enriquece nuestro conocimiento ancestral",
+    54: "Una obra que cautiva e inspira profundamente."
     }
 
 start_time = time.time()

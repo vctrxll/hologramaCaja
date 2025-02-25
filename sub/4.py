@@ -19,23 +19,28 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/ESCUDO ANTIGUO DE TRES DISCOS.mp3"
+audio_path = "../AUDIOS/2025/4.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-        0: "Aquí presentamos un escudo antiguo de tres discos...",
-        5: "... encontrado en un cementerio púnico en 1909 cerca de la ciudad de Ksour Essef, en la gobernación de Mahdia, Túnez.",
-        10: "Esta pieza, que data generalmente del siglo III a.C., es de origen italiano...",
-        15: "... y proviene del sur de Italia.",
-        20: "Su hallazgo en Túnez llevó a los investigadores a asociarlo con las expediciones de la Segunda Guerra Púnica...",
-        25: "... lideradas por el general cartaginés Aníbal en Italia entre los años 211 y 203 a.C.",
-        30: "Actualmente, el escudo se encuentra en el Museo Nacional del Bardo en Túnez...",
-        35: "... junto con el material arqueológico encontrado en la misma tumba.",
-        40: "Un siglo después de su descubrimiento, sigue siendo una de las piezas simbólicas más destacadas...",
-        45: "... de la sección antigua a la que pertenece."
-    }
+    0: "CAJETE TRÍPODE DE FONDO SELLADO.",
+    3: "Esta pieza aquí es un cajete trípode de fondo sellado,",
+    9: "una pieza típica de los habitantes de la cuenca del Papaloapan.",
+    13: "Se caracteriza por su forma hemisférica",
+    15: "y por un fondo que fue sellado con moldes de barro cocido.",
+    20: "Estos sellos, utilizados para crear relieves en la base de la vasija,",
+    25: "son la principal distintiva de este tipo de cerámica.",
+    28: "Los cajetes cumplían dos funciones importantes:",
+    32: "servían para preparar alimentos, de manera similar al molcajete,",
+    36: "y también formaban parte de ofrendas mortuorias,",
+    40: "ya que no muestran desgaste en su fondo sellado,",
+    44: "lo que sugiere que se usaban exclusivamente con fines ceremoniales.",
+    48: "Este tipo de cerámica refleja la habilidad",
+    51: "y el simbolismo de los pueblos antiguos de la región."
+}
+
 
 start_time = time.time()
 running = True

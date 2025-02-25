@@ -19,25 +19,27 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/COLGANTE PUNICO.mp3"
+audio_path = "../AUDIOS/2025/2.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-        0: "Aquí tenemos un colgante púnico de vidrio de Cartago...",
-        5: "... que representa a Baal, también conocido como Melkart, Herakles y Hércules.",
-        10: "Descubierto en una antigua fosa de basura de la ciudad íbera de Alon...",
-        15: "... este raro hallazgo es uno de los pocos ejemplares encontrados en la Península Ibérica.",
-        20: "El amuleto de 5 cm destaca por sus grandes ojos abiertos...",
-        25: "... diseñados para repeler el 'mal de ojo' y subraya la importancia de Baal en el panteón cartaginés.",
-        30: "Refleja creencias y prácticas culturales antiguas.",
-        35: "Este colgante demuestra la habilidad de los artesanos púnicos en el trabajo del vidrio...",
-        40: "... y también representa creencias religiosas y prácticas espirituales de Cartago.",
-        45: "Destaca la importancia del simbolismo y la indumentaria en su cultura.",
-        50: "Su inesperado descubrimiento es un valioso testimonio...",
-        55: "... de la rica historia y del legado cultural de Cartago."
-    }
+    0: "JARRA DE CUERPO ELIPSOIDAL",
+    2: "La tercera pieza en esta vasta exhibición es una jarra de cuerpo elipsoidal.",
+    8: "Su elegante cuello alto y su forma ovoide fueron modelados en una pasta gris muy",
+    12: "oscura, similar a las que usaban los grupos mixtecos y zapotecos",
+    18: "en la última etapa prehispánica de Mesoamérica.",
+    22: "Aunque parece una vasija para líquidos,",
+    25: "no posee el recubrimiento necesario para contenerlos,",
+    29: "lo que indica que fue creada especialmente para integrarse en ofrendas rituales.",
+    35: "Este tipo de jarra es común en los Valles Centrales de Oaxaca y la región Mixteca,",
+    40: "pero es muy escasa en la región serrana,",
+    43: "resaltando su alto valor como objeto de intercambio comercial.",
+    47: "Una obra que nos invita a descubrir la espiritualidad",
+    53: "y las complejas relaciones culturales del pasado."
+}
+
 
 start_time = time.time()
 running = True

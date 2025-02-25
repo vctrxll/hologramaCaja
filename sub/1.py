@@ -19,24 +19,25 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/HERMA CON EL BUSTO DE BACO.mp3"
+audio_path = "../AUDIOS/2025/1.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-        0: "Aquí presentamos un herma con el busto de Baco...",
-        5: "... esculpida en mármol amarillo de Túnez, conocido como giallo antico.",
-        10: "Esta pieza destaca por su barba y una diadema de mirto con flores...",
-        15: "... aportando un toque orientalizante a sus facciones.",
-        20: "Fue hallada en una habitación de una casa en la parte alta de Baetulo.",
-        25: "Este descubrimiento refleja la influencia y la estética romanas...",
-        30: "... combinando elementos artísticos orientales y occidentales en una representación única.",
-        35: "Baco, el dios del vino y el éxtasis, era venerado por su conexión con la naturaleza y la fertilidad.",
-        40: "La herma muestra la habilidad de los artesanos romanos en el manejo del mármol...",
-        45: "... e ilustra la integración cultural en la decoración y la religión de la época.",
-        50: "Sirve como un testimonio valioso de la historia y el legado artístico de Baetulo."
-    }
+    0: "CAJETE GRIS DE SILUETA COMPUESTA TRÍPODE:",
+    3: "La segunda de la exhibición es el CAJETE GRIS DE SILUETA COMPUESTA TRÍPODE.",
+    8: "Aunque carece de soportes, se cree que originalmente se añadían figuras animales",
+    14: "como serpientes o venados, en cuyo caso se representaba una pezuña.",
+    18: "Esta tradición, propia de los grupos chinantecos y mazatecos, se distingue por la suavidad",
+    26: "de su pasta, similar a la textura de un gis.",
+    29: "Aunque este tipo de vasija se encuentra en diversas regiones de Oaxaca,",
+    33: "su silueta compuesta es particularmente característica en estos grupos.",
+    38: "Se usaba tanto como objeto de servicio cotidiano como en rituales mortuorios,",
+    44: "ya que se han descubierto en tumbas de la cuenca del Papaloapan.",
+    48: "Algunos exploradores del siglo pasado relataron la presencia de ofrendas de pequeños animales,",
+    55: "como peces."
+}
 
 start_time = time.time()
 running = True

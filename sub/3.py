@@ -19,25 +19,29 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/JARRO DE ARCILLA PÚNICO.mp3"
+audio_path = "../AUDIOS/2025/3.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-        0: "Aquí tenemos un jarro de arcilla púnico...",
-        5: "... un artefacto representativo del arte y la utilidad en la antigua civilización cartaginense.",
-        10: "Este recipiente, moldeado meticulosamente con arcilla local...",
-        15: "... destaca por su diseño robusto y funcional.",
-        20: "Típicamente utilizado para el almacenamiento y transporte de alimentos y líquidos...",
-        25: "... esencial para el comercio marítimo y la vida cotidiana púnica.",
-        30: "El jarro refleja la pericia técnica de los artesanos púnicos en cerámica...",
-        35: "... conocidos por su habilidad para crear objetos duraderos y estéticamente agradables.",
-        40: "Su forma y material nos ofrecen una ventana al pasado...",
-        45: "... revelando detalles sobre las prácticas diarias y económicas de Cartago.",
-        50: "Este jarro no solo es un testimonio de la vida diaria...",
-        55: "... sino también un vestigio de las rutas comerciales del Mediterráneo antiguo."
-    }
+    0: "VASO POLÍCROMO TRÍPODE.",
+    3: "En esta quinta pieza les presento el Vaso Policromo Trípode,",
+    8: "una pieza excepcional elaborada con una pasta muy fina",
+    12: "y de vibrante coloración naranja.",
+    14: "Aunque sus paredes son delgadas, la precisión en sus detalles destaca,",
+    19: "en especial los soportes que, pese a no estar presentes,",
+    22: "se reconocen por su estilo y decoración.",
+    25: "Los estudios identifican estos soportes en una tradición pictórica del Posclásico tardío,",
+    32: "caracterizada por colores como el naranja, rojo, blanco, ocre",
+    37: "y tonalidades especiales para la cultura de la Chinantla, incluso el rosa.",
+    43: "Los motivos simbolizan el poder del sol:",
+    46: "un gran círculo central engalanado con pequeñas joyas, alas de águila",
+    51: "y una banda en el borde con rayos y turquesa.",
+    55: "Esta obra refleja la adoración al astro rey,",
+    58: "considerado como joya preciosa."
+}
+
 
 start_time = time.time()
 running = True
