@@ -19,25 +19,28 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/10E.mp3"
+audio_path = "../AUDIOS/2025/6.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-        0: "Hoy les presento un cajete gris trípode de pasta fina...",
-        5: "... elaborado por los grupos culturales chinantecos y mazatecos durante el Posclásico Tardío.",
-        10: "Este tipo de vasija es especialmente notable por su diseño y uso ceremonial...",
-        15: "... distinguiéndose por su forma trípode, que le da estabilidad y eleva la vasija del suelo.",
-        20: "Lo que realmente destaca en esta pieza es el motivo decorativo en su fondo...",
-        25: "... realizado cuando la vasija aún estaba fresca.",
-        30: "Este motivo es una cruz que divide la vasija en los cuatro puntos cardinales...",
-        35: "... un diseño que refleja la importancia simbólica de la orientación y el cosmos en la cultura de estos pueblos.",
-        40: "El hecho de que este tipo de vasijas se haya encontrado exclusivamente en recintos funerarios...",
-        45: "... sugiere que tenían un uso ritual específico.",
-        50: "Estas vasijas no eran simples objetos cotidianos...",
-        55: "... sino que desempeñaban un papel en los rituales relacionados con la muerte y el más allá."
+    0: "COPA DE SILUETA COMPUESTA CON BASE DE PEDESTAL.",
+    3: "Esta copa de silueta compuesta con base de pedestal",
+    6: "es una pieza de pasta negra muy fina,",
+    10: "con un acabado pulido que demuestra un gran trabajo en su modelado.",
+    14: "Aunque su forma es similar a otras piezas de esta vitrina,",
+    18: "el color gris, lo delgada de la pieza y su acabado fino",
+    22: "la vinculan con el grupo mixteco.",
+    25: "Aunque no tiene un soporte visible,",
+    28: "se asemeja a una vasija que se exhibe aquí,",
+    31: "lo que sugiere que originalmente tuvo una base de pedestal alto.",
+    35: "Esta copa fue colocada boca abajo,",
+    38: "lo cual es común en piezas funerarias de contextos como las cuevas,",
+    42: "donde este tipo de postura tiene un significado ritual.",
+    47: "Es un ejemplo claro de la sofisticación de la cerámica mixteca."
 }
+
 
 start_time = time.time()
 running = True

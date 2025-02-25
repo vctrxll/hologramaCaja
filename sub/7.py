@@ -19,23 +19,29 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/6E.mp3"
+audio_path = "../AUDIOS/2025/7.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-    0: "Aquí tenemos una olla baja policroma trípode, una pieza excepcionalmente fina y elaborada con destreza.",
-    5: "Esta olla, hecha de una arcilla muy fina y con un grosor de sólo 3 mm, no se ha encontrado en ningún otro lugar de Mesoamérica...",
-    10: "... lo que la convierte en una forma diagnóstica y única.",
-    15: "La decoración de esta olla es especialmente notable por sus temas rituales, asociados a una serpiente fantástica que podría ser una de las deidades más importantes en la mitología mesoamericana.",
-    20: "La imagen de la serpiente fantástica sugiere un significado relacionado con el cosmos.",
-    25: "En el cuello de la vasija, encontramos una banda solar simplificada.",
-    30: "Está compuesta por rayos solares pintados en rojo y espinas de sacrificio, elementos que evocan prácticas y simbolismos rituales.",
-    35: "Los rayos solares y las espinas de sacrificio indican la importancia del Sol en las ceremonias religiosas y su relación con el sacrificio...",
-    40: "... un tema recurrente en las culturas mesoamericanas.",
-    45: "Esta olla es, sino también, un testimonio de sus creencias, ofreciendo una visión fascinante de su mundo espiritual."
+    0: "OLLA MINIATURA.",
+    1: "Hoy les presento la Olla Miniatura,",
+    5: "una representación de una olla de cuello curvo con aditamento de asas.",
+    10: "Esta pieza está elaborada en barro burdo de tonalidades claras;",
+    15: "el color blanco del exterior proviene de residuos adheridos por el paso del tiempo.",
+    20: "Durante la época prehispánica, las representaciones en miniatura",
+    25: "eran parte cotidiana de la vida,",
+    27: "hallándose formas como platos, cuecos, jarras, ollas, cántaros",
+    32: "e incluso vasijas rituales tales como sahumadores o incensarios.",
+    37: "Por largo tiempo se interpretaron como juguetes,",
+    40: "similar a lo que ocurre hoy en día.",
+    43: "Sin embargo, estudios de residuos químicos en algunas vasijas del centro de México",
+    48: "han permitido proponer su uso como recipientes rituales,",
+    53: "en los que se depositaba el líquido precioso de la sangre",
+    55: "para ofrendas a deidades."
 }
+
 
 
 start_time = time.time()

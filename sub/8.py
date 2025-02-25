@@ -19,25 +19,29 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "50,770"  # Ajusta las coordenadas según n
 screen = create_subtitle_window()
 
 
-audio_path = "../../AUDIOS/ESPANOL/PEDANTE FENICIO DE CRISTAL.mp3"
+audio_path = "../AUDIOS/2025/8.mp3"
 audio = pygame.mixer.Sound(audio_path)
 audio_length = audio.get_length()
 
 # Diccionario con subtítulos sincronizados
 dialogue = {
-    0: "Aquí tenemos un pedante fenicio de cristal en forma de cabeza barbuda...",
-    5: "... originario de Cartago y datado en los siglos IV a III a.C.",
-    10: "Actualmente, esta pieza está expuesta en el Museo Nacional del Bardo en Túnez...",
-    15: "... y es un ejemplo exquisito de la maestría en el trabajo del vidrio de los fenicios.",
-    20: "Una técnica que alcanzaron con gran perfección...",
-    25: "... y que refleja la sofisticación de su cultura.",
-    30: "La representación de la barba puede indicar sabiduría o autoridad...",
-    35: "... rasgos valorados en muchas culturas antiguas.",
-    40: "Este colgante no solo demuestra la habilidad artesanal fenicia...",
-    45: "... sino que también ofrece una ventana a las prácticas espirituales y la vida cotidiana en la antigua Cartago.",
-    50: "Revela la importancia de los amuletos y la simbología religiosa en esta civilización marítima avanzada...",
-    55: "... sirviendo como un puente entre el pasado remoto y el presente."
-    }
+    0: "OLLA MINIATURA.",
+    3: "Esta es la segunda Olla Miniatura,",
+    6: "una representación de un cántaro con borde recto divergente,",
+    8: "elaborada con barro oscuro y un acabado liso.",
+    11: "Aunque carece de un fragmento en su borde debido al paso del tiempo,",
+    16: "su diseño refleja la destreza de los artesanos de la época.",
+    20: "Las piezas miniatura eran comunes en la época prehispánica,",
+    25: "y encontramos todo tipo de formas, como platos, cuencos, jarras,",
+    28: "ollas y cántaros, así como vasijas rituales como sahumadores e incensarios.",
+    34: "Durante mucho tiempo se pensó que estas piezas eran juguetes,",
+    39: "pero estudios recientes han revelado",
+    42: "que algunas de estas vasijas contenían residuos de sangre.",
+    45: "Esto sugiere que se usaban como recipientes rituales",
+    50: "para ofrendar sangre a deidades",
+    52: "o durante celebraciones en los calendarios ceremoniales."
+}
+
 
 start_time = time.time()
 running = True
