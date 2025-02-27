@@ -400,15 +400,20 @@ with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_conf
                     vis.update_renderer()  # Actualiza el renderizador.
                     hand_detection_counter = 0
                     logo = True
+
+                    subtitulos = gw.getWindowsWithTitle("pygame window")
+                    if subtitulos:
+                        pygame_window = subtitulos[0]  # Si hay múltiples ventanas, tomamos la primera
+                        pygame_window.close()
+                    else:
+                        print("No se encontró una ventana llamada 'pygame window'.")
+
                     print("Regresar inicio")
 
             ctrl = vis.get_view_control()
             ctrl.rotate(3, 0, xo=0.0, yo=0.0)
             vis.poll_events()
             vis.update_renderer()
-            # Si no se detectan manos, rota el modelo 3D ligeramente.
-        if not isFullscreen:
-            cv2.imshow('MANO', image)
         if cv2.waitKey(5) & 0xFF == ord('q'):
             print("Programa cerrado por el usuario.")
             break
