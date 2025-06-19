@@ -33,4 +33,4 @@ This project aims to **make museums more interactive and engaging** for younger 
 
 📦 Instalar dependencias:
 ```bash
-pip install opencv-python mediapipe
+pip install -r requirements.txt
