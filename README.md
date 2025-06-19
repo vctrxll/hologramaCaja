@@ -24,10 +24,14 @@ This project aims to **make museums more interactive and engaging** for younger 
 🎨 Create a gesture-controlled hologram system that enhances the museum experience, making exploration of exhibits more fun, interactive, and immersive.
 
 ---
+## ⚙️ Instrucciones de Uso
+![Piezas](https://github.com/user-attachments/assets/ccfb2ef9-2333-4b39-bef8-741630186c5a)
+
 
 ## ⚙️ Requisitos | Requirements
 
 - Python 3.10.9
+
 - Librerías: `opencv-python`, `mediapipe`
 - Cámara web funcionando
 
